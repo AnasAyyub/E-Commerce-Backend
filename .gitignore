@@ -1,0 +1,16 @@
+# Ignore application.properties in src/main/resources
+**/application.properties
+
+# Ignore target folder (Maven build output)
+target/
+
+# Ignore IntelliJ IDEA project files
+.idea/
+*.iml
+
+# Ignore logs
+*.log
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
