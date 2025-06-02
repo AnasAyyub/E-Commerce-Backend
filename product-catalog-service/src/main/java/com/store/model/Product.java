@@ -2,7 +2,7 @@ package com.store.model;
 
 import jakarta.persistence.*;
 
-import java.util.LinkedList;
+
 
 @Entity
 public class Product {

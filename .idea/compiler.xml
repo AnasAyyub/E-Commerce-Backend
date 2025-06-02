@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="product-catalog-service" />
         <module name="store" />
+        <module name="user-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
