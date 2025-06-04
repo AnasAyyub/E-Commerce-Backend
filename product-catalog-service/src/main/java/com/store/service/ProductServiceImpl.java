@@ -16,6 +16,7 @@ public class ProductServiceImpl implements ProductService{
 
     private RestTemplate template;
     private String uri="https://fakestoreapi.com/products/";
+
     @Autowired
     public ProductServiceImpl(RestTemplate template){
         this.template=template;
