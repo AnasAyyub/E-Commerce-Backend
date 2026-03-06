@@ -4,6 +4,7 @@ import com.store.model.Category;
 import com.store.model.Product;
 import com.store.service.CategoryService;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,17 +13,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/categories")
 public class CategoryController {
-    private CategoryService service;
 
+    private CategoryService service;
     public CategoryController(CategoryService service){
         this.service=service;
     }
-    @GetMapping("/{id}/products")
-    public ResponseEntity<List<Product>> getAllProducts(@PathVariable long id){
-        List<Product> products=service.getAllProducts(id);
-        if (products!=null)
-            return ResponseEntity.ok(products);
-        return ResponseEntity.badRequest().build();
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Category> getCategory(@PathVariable String categoryId){
+        Category category=service.getCategory(categoryId);
+        return category==null?ResponseEntity.notFound().build():ResponseEntity.ok(category);
     }
 
     @GetMapping
@@ -33,8 +33,31 @@ public class CategoryController {
         return ResponseEntity.badRequest().build();
     }
 
+
     @PostMapping
-    public void addCategory(@RequestBody Category category){
-        service.addCategory(category);
+    public ResponseEntity<Category> addCategory(@RequestBody Category category){
+
+        Category addedCategory=service.addCategory(category);
+        return new ResponseEntity<>(addedCategory,HttpStatus.OK);
+
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Category> editCategory(@RequestBody Category category,@PathVariable("id") String categoryId){
+        try {
+            Category updatedCategory=service.updateCategory(category,categoryId);
+            return ResponseEntity.ok(updatedCategory);
+        }
+        catch (RuntimeException e){
+            System.out.println("Invalid Category");
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteCategory(@PathVariable String id){
+        service.delete(id);
+        return ResponseEntity.ok("Category Deleted");
     }
 }

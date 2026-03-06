@@ -1,29 +1,35 @@
 package com.store.model;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Map;
 
 
-
-@Entity
+@Document(collection = "products")
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String id;
     private String title;
     private double price;
     private String description;
-
-
-    @ManyToOne
-    @JoinColumn(name="category_id")
-    private Category category;
+    private String categoryId;
     private String image;
+    private Map<String,Object> attributes;
 
-    public long getId() {
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -51,13 +57,7 @@ public class Product {
         this.description = description;
     }
 
-    public Category getCategory() {
-        return category;
-    }
 
-    public void setCategory(Category category) {
-        this.category = category;
-    }
 
     public String getImage() {
         return image;
@@ -65,5 +65,13 @@ public class Product {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map<String, Object> attributes) {
+        this.attributes = attributes;
     }
 }
