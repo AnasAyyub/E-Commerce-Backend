@@ -1,28 +1,48 @@
 package com.store.models;
 
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class User extends BaseModel {
+
+    private String name;
 
     @Column(nullable = false,unique = true)
     private String email;
 
     @Column(nullable = false,unique = true)
-    private String password;
+    private String hashedPassword;
 
-    private String role;
+    @ManyToMany(fetch=FetchType.EAGER)
+    private List<Role> roles;
+    private boolean isEmailVerified;
 
-    public long getId() {
-        return id;
+    public boolean isEmailVerified() {
+        return isEmailVerified;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setEmailVerified(boolean emailVerified) {
+        isEmailVerified = emailVerified;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public String getHashedPassword() {
+        return hashedPassword;
+    }
+
+    public void setHashedPassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
     }
 
     public String getEmail() {
@@ -33,19 +53,11 @@ public class User {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getName() {
+        return name;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
+    public void setName(String name) {
+        this.name = name;
     }
 }
