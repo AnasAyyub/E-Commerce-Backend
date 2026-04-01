@@ -6,13 +6,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="auth-service" />
         <module name="store" />
         <module name="user-service" />
         <module name="product-catalog-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="auth-service" target="17" />
       <module name="ProductCatalogService" target="1.8" />
     </bytecodeTargetLevel>
   </component>

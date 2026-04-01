@@ -1,13 +1,10 @@
 package com.store.dtos;
 
-import com.store.models.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-public class RegisterRequestDTO {
-
+public class SignupDTO {
     private String name;
     @Email(message = "Email must be valid")
     private String email;

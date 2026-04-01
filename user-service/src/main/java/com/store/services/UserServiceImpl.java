@@ -1,23 +1,20 @@
 package com.store.services;
 
-import com.store.dtos.LoginDTO;
-import com.store.dtos.RegisterRequestDTO;
-import com.store.dtos.TokenDTO;
-import com.store.dtos.UserDTO;
+import com.store.dtos.*;
+import com.store.exceptions.EmailAlreadyExistsException;
 import com.store.exceptions.InvalidTokenException;
 import com.store.exceptions.UserNotFoundException;
+import com.store.models.Role;
 import com.store.models.Token;
 import com.store.models.User;
+import com.store.repositories.RoleRepository;
 import com.store.repositories.TokenRepository;
 import com.store.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,17 +24,26 @@ public class UserServiceImpl implements UserService{
     private PasswordEncoder passwordEncoder;
     private UserRepository userRepository;
     private TokenRepository tokenRepository;
+    private RoleRepository roleRepository;
 
-    public UserServiceImpl(PasswordEncoder passwordEncoder,UserRepository userRepository,TokenRepository tokenRepository){
+    public UserServiceImpl(PasswordEncoder passwordEncoder,UserRepository userRepository,TokenRepository tokenRepository,RoleRepository roleRepository) {
         this.passwordEncoder=passwordEncoder;
         this.userRepository=userRepository;
         this.tokenRepository=tokenRepository;
+        this.roleRepository=roleRepository;
     }
 
-    public UserDTO registerUser(RegisterRequestDTO registerRequest){
-        User newUser=convertToUser(registerRequest);
+
+    //Signing Up
+    public SignupResponseDTO registerUser(SignupDTO signupDTO){
+        if (userRepository.existsByEmail(signupDTO.getEmail())){
+            throw new EmailAlreadyExistsException("Email Already Exists");
+        }
+        User newUser=convertToUser(signupDTO);
+        Role role=roleRepository.findByName("ROLE_USER");
+        newUser.setRoles(List.of(role));
         userRepository.save(newUser);
-        return convertToUserDTO(newUser);
+        return convertToSignupResponseDTO(newUser);
     }
 
     public Token login(LoginDTO loginDTO){
@@ -82,7 +88,7 @@ public class UserServiceImpl implements UserService{
         t.setValue(UUID.randomUUID().toString());
         return t;
     }
-    public User convertToUser(RegisterRequestDTO registerRequest){
+    public User convertToUser(SignupDTO registerRequest){
         User u=new User();
         u.setName(registerRequest.getName());
         u.setEmail(registerRequest.getEmail());
@@ -90,10 +96,20 @@ public class UserServiceImpl implements UserService{
         return u;
     }
 
-    public UserDTO convertToUserDTO(User u){
-        UserDTO userDTO=new UserDTO();
-        userDTO.setName(u.getName());
-        userDTO.setEmail(u.getEmail());
-        return userDTO;
+//    public UserDTO convertToUserDTO(User u){
+//        UserDTO userDTO=new UserDTO();
+//        userDTO.setName(u.getName());
+//        userDTO.setEmail(u.getEmail());
+//        return userDTO;
+//    }
+
+
+    public SignupResponseDTO convertToSignupResponseDTO(User newUser){
+
+        SignupResponseDTO signupResponseDTO=new SignupResponseDTO();
+        signupResponseDTO.setId(newUser.getId());
+        signupResponseDTO.setMessage("User created successfully");
+
+        return signupResponseDTO;
     }
 }

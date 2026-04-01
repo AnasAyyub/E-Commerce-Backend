@@ -1,15 +1,11 @@
 package com.store.services;
 
-import com.store.dtos.LoginDTO;
-import com.store.dtos.RegisterRequestDTO;
-import com.store.dtos.TokenDTO;
-import com.store.dtos.UserDTO;
+import com.store.dtos.*;
 import com.store.models.Token;
-import com.store.models.User;
 
 public interface UserService {
 
-    UserDTO registerUser(RegisterRequestDTO registerRequest);
+    SignupResponseDTO registerUser(SignupDTO registerRequest);
 
     Token login(LoginDTO loginDTO);
 
